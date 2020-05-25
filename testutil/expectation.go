@@ -3,6 +3,7 @@ package testutil
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/SevereCloud/vksdk/api"
 	"github.com/SevereCloud/vksdk/api/errors"
 	"github.com/SevereCloud/vksdk/object"

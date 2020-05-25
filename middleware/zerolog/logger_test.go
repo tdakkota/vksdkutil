@@ -1,11 +1,12 @@
 package zerolog
 
 import (
+	"testing"
+
 	"github.com/SevereCloud/vksdk/api"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestLogResponse(t *testing.T) {

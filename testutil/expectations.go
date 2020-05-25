@@ -7,6 +7,7 @@ func (stack *Expectations) Pop() (result *Expectation, ok bool) {
 		return nil, false
 	}
 	result, *stack = (*stack)[0], (*stack)[1:]
+
 	return result, true
 }
 

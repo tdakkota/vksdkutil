@@ -7,8 +7,8 @@ linters:
     - gochecknoglobals
     - goconst
     - gocritic
-    - gofmt
-    - goimports
+   # - gofmt
+   # - goimports
     - golint
     - goprintffuncname
     - gosec
@@ -29,7 +29,8 @@ linters:
     - unused
     - varcheck
     - whitespace
-    - wsl
+    - lll
+    - nolintlint
     - godot
 
   # don't enable:

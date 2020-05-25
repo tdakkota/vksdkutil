@@ -1,11 +1,12 @@
 package zap
 
 import (
+	"time"
+
 	"github.com/SevereCloud/vksdk/api"
 	sdkutil "github.com/tdakkota/vksdkutil"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"time"
 )
 
 func LoggingMiddleware(l *zap.Logger, lvl zapcore.Level) func(handler sdkutil.Handler) sdkutil.Handler {

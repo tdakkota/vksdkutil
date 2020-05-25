@@ -2,10 +2,11 @@ package testutil
 
 import (
 	"encoding/json"
+	"testing"
+
 	"github.com/SevereCloud/vksdk/api"
 	"github.com/SevereCloud/vksdk/object"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func createExpectation() (string, api.Params, *Expectation) {

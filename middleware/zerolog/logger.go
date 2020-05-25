@@ -20,6 +20,7 @@ func LoggingMiddleware(l zerolog.Logger) func(handler sdkutil.Handler) sdkutil.H
 				Dur("took", time.Since(start)).
 				Err(err).
 				Msg("send VK request")
+
 			return r, err
 		}
 	}

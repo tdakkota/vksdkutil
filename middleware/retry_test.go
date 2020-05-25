@@ -2,10 +2,11 @@ package middleware
 
 import (
 	"fmt"
-	"github.com/SevereCloud/vksdk/api"
-	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+
+	"github.com/SevereCloud/vksdk/api"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestRetry(t *testing.T) {

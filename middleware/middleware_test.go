@@ -1,9 +1,10 @@
 package middleware
 
 import (
+	"testing"
+
 	"github.com/SevereCloud/vksdk/api"
 	"github.com/tdakkota/vksdkutil"
-	"testing"
 )
 
 func testDeleteToken(params []string, handler sdkutil.Handler) func(t *testing.T) {
@@ -18,39 +19,48 @@ func testDeleteToken(params []string, handler sdkutil.Handler) func(t *testing.T
 }
 
 func TestDeleteToken(t *testing.T) {
-	t.Run("no-one", testDeleteToken([]string{}, func(method string, params api.Params) (api.Response, error) {
-		if _, ok := params["access_token"]; !ok {
-			t.Fatal("expected token")
-		}
+	t.Run("no-one", testDeleteToken(
+		[]string{},
+		func(method string, params api.Params) (api.Response, error) {
+			if _, ok := params["access_token"]; !ok {
+				t.Fatal("expected token")
+			}
 
-		if _, ok := params["v"]; !ok {
-			t.Fatal("expected version")
-		}
+			if _, ok := params["v"]; !ok {
+				t.Fatal("expected version")
+			}
 
-		return api.Response{}, nil
-	}))
+			return api.Response{}, nil
+		}),
+	)
 
-	t.Run("one", testDeleteToken([]string{"access_token"}, func(method string, params api.Params) (api.Response, error) {
-		if _, ok := params["access_token"]; ok {
-			t.Fatal("expected no token")
-		}
+	t.Run("one", testDeleteToken(
+		[]string{"access_token"},
+		func(method string, params api.Params) (api.Response, error) {
+			if _, ok := params["access_token"]; ok {
+				t.Fatal("expected no token")
+			}
 
-		if _, ok := params["v"]; !ok {
-			t.Fatal("expected version")
-		}
+			if _, ok := params["v"]; !ok {
+				t.Fatal("expected version")
+			}
 
-		return api.Response{}, nil
-	}))
+			return api.Response{}, nil
+		}),
+	)
 
-	t.Run("multiple", testDeleteToken([]string{"access_token", "v"}, func(method string, params api.Params) (api.Response, error) {
-		if _, ok := params["access_token"]; ok {
-			t.Fatal("expected no token")
-		}
+	t.Run("multiple", testDeleteToken(
+		[]string{"access_token", "v"},
+		func(method string, params api.Params) (api.Response, error) {
+			if _, ok := params["access_token"]; ok {
+				t.Fatal("expected no token")
+			}
 
-		if _, ok := params["v"]; ok {
-			t.Fatal("expected no version")
-		}
+			if _, ok := params["v"]; ok {
+				t.Fatal("expected no version")
+			}
 
-		return api.Response{}, nil
-	}))
+			return api.Response{}, nil
+		}),
+	)
 }

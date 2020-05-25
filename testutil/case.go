@@ -2,9 +2,10 @@ package testutil
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/SevereCloud/vksdk/api"
 	sdkutil "github.com/tdakkota/vksdkutil"
-	"testing"
 )
 
 type TestCase struct {
@@ -18,6 +19,7 @@ func NewTestCase() *TestCase {
 func (test *TestCase) ExpectCall(method string) *Expectation {
 	p := NewExpectation(method)
 	test.Expectations.Push(p)
+
 	return p
 }
 
@@ -41,8 +43,8 @@ func (test *TestCase) Handler() sdkutil.Handler {
 }
 
 func CreateSDK(t *testing.T) (*api.VK, *TestCase) {
-	testCase := NewTestCase()
-	sdk := api.NewVK("")
+	sdk, testCase := api.NewVK(""), NewTestCase()
 	sdk.Handler = testCase.Handler()
+
 	return sdk, testCase
 }

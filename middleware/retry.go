@@ -1,9 +1,10 @@
 package middleware
 
 import (
+	"time"
+
 	"github.com/SevereCloud/vksdk/api"
 	"github.com/tdakkota/vksdkutil"
-	"time"
 )
 
 func Retry(maxAttempts int, timeout time.Duration) func(handler sdkutil.Handler) sdkutil.Handler {
@@ -16,7 +17,6 @@ func Retry(maxAttempts int, timeout time.Duration) func(handler sdkutil.Handler)
 				if err != nil {
 					attempt++
 					time.Sleep(timeout)
-
 					continue
 				}
 			}

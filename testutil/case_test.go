@@ -1,9 +1,10 @@
 package testutil
 
 import (
+	"testing"
+
 	"github.com/SevereCloud/vksdk/api"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestTestCase(t *testing.T) {
