@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestLogResponse(t *testing.T) {
+func TestLoggingMiddleware(t *testing.T) {
 	logger := log.Logger.
 		Level(zerolog.InfoLevel)
 
