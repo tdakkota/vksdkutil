@@ -1,5 +1,5 @@
 # VK SDK Utilities 
-![CI](https://github.com/tdakkota/vksdkutil/workflows/master/badge.svg)
+[![CI](https://github.com/tdakkota/vksdkutil/workflows/master/badge.svg)](https://github.com/tdakkota/vksdkutil/actions)
 [![Documentation](https://godoc.org/github.com/tdakkota/vksdkutil?status.svg)](https://pkg.go.dev/github.com/tdakkota/vksdkutil?tab=subdirectories)
 [![codecov](https://codecov.io/gh/tdakkota/vksdkutil/branch/master/graph/badge.svg)](https://codecov.io/gh/tdakkota/vksdkutil)
 [![license](https://img.shields.io/github/license/tdakkota/vksdkutil.svg?maxAge=2592000)](https://github.com/tdakkota/vksdkutil/blob/master/LICENSE)

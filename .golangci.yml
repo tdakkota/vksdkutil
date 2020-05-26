@@ -7,8 +7,6 @@ linters:
     - gochecknoglobals
     - goconst
     - gocritic
-    - gofmt
-    - goimports
     - golint
     - goprintffuncname
     - gosec

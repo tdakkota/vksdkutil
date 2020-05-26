@@ -29,10 +29,7 @@ func TestTestLongPoll(t *testing.T) {
 	})
 
 	go func() {
-		err := lp.Run()
-		if err != nil {
-			t.Error(err)
-		}
+		_ = lp.Run()
 	}()
 
 	for _, message := range messages {
