@@ -9,6 +9,7 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
+// LoggingMiddleware is middleware which logs VK API request info
 func LoggingMiddleware(l *zap.Logger, lvl zapcore.Level) func(handler sdkutil.Handler) sdkutil.Handler {
 	return func(handler sdkutil.Handler) sdkutil.Handler {
 		return func(method string, params api.Params) (api.Response, error) {

@@ -7,6 +7,8 @@ import (
 	"github.com/tdakkota/vksdkutil"
 )
 
+// Retry is middleware which retries requests if underlying handler
+// fails.
 func Retry(maxAttempts int, timeout time.Duration) func(handler sdkutil.Handler) sdkutil.Handler {
 	return func(handler sdkutil.Handler) sdkutil.Handler {
 		return func(method string, params api.Params) (r api.Response, err error) {
