@@ -39,7 +39,7 @@ func (l TestLongPoll) parseArgs(r *http.Request) (time.Duration, string, error) 
 
 	wait, err := strconv.ParseInt(r.Form.Get("wait"), 10, 64)
 	if err != nil {
-		return 0, "", err
+		return 0, "", fmt.Errorf("argument 'wait' is invalid")
 	}
 
 	if wait < 1 {
@@ -75,7 +75,7 @@ func (l TestLongPoll) SendMessage(msg object.MessagesMessage) error {
 }
 
 func (l TestLongPoll) NotifyOne(event object.GroupEvent) {
-	l.subscriptions.Notify([]object.GroupEvent{event})
+	l.Notify([]object.GroupEvent{event})
 }
 
 func (l TestLongPoll) Notify(events []object.GroupEvent) {
