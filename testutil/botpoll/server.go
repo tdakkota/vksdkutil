@@ -4,11 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/SevereCloud/vksdk/object"
 	"net/http"
 	"net/http/httptest"
 	"strconv"
 	"time"
+
+	"github.com/SevereCloud/vksdk/object"
 )
 
 type TestLongPoll struct {

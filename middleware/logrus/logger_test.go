@@ -1,10 +1,11 @@
 package logrus
 
 import (
+	"testing"
+
 	"github.com/SevereCloud/vksdk/api"
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 type hookFunc func(*logrus.Entry) error

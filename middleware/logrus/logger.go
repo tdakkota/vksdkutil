@@ -1,13 +1,14 @@
 package logrus
 
 import (
+	"time"
+
 	"github.com/SevereCloud/vksdk/api"
 	"github.com/sirupsen/logrus"
 	sdkutil "github.com/tdakkota/vksdkutil"
-	"time"
 )
 
-// LoggingMiddleware is middleware which logs VK API request info
+// LoggingMiddleware is middleware which logs VK API request info.
 func LoggingMiddleware(l *logrus.Logger) func(handler sdkutil.Handler) sdkutil.Handler {
 	return func(handler sdkutil.Handler) sdkutil.Handler {
 		return func(method string, params api.Params) (api.Response, error) {

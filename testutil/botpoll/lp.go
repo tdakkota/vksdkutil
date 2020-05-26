@@ -1,9 +1,10 @@
 package botpoll
 
 import (
+	"strconv"
+
 	"github.com/SevereCloud/vksdk/api"
 	"github.com/SevereCloud/vksdk/longpoll-bot"
-	"strconv"
 )
 
 func NewLongPoll(vk *api.VK) (*longpoll.Longpoll, TestLongPoll) {

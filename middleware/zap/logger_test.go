@@ -1,11 +1,12 @@
 package zap
 
 import (
+	"testing"
+
 	"github.com/SevereCloud/vksdk/api"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"testing"
 )
 
 func TestLoggingMiddleware(t *testing.T) {

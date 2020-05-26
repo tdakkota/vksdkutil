@@ -1,5 +1,5 @@
 # VK SDK Utilities 
-[![Build Status](https://travis-ci.com/tdakkota/vksdkutil.svg?branch=master)](https://travis-ci.com/tdakkota/vksdkutil)
+![CI](https://github.com/tdakkota/vksdkutil/workflows/master/badge.svg)
 [![Documentation](https://godoc.org/github.com/tdakkota/vksdkutil?status.svg)](https://pkg.go.dev/github.com/tdakkota/vksdkutil?tab=subdirectories)
 [![codecov](https://codecov.io/gh/tdakkota/vksdkutil/branch/master/graph/badge.svg)](https://codecov.io/gh/tdakkota/vksdkutil)
 [![license](https://img.shields.io/github/license/tdakkota/vksdkutil.svg?maxAge=2592000)](https://github.com/tdakkota/vksdkutil/blob/master/LICENSE)

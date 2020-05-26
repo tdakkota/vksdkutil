@@ -8,7 +8,7 @@ import (
 	sdkutil "github.com/tdakkota/vksdkutil"
 )
 
-// LoggingMiddleware is middleware which logs VK API request info
+// LoggingMiddleware is middleware which logs VK API request info.
 func LoggingMiddleware(l zerolog.Logger) func(handler sdkutil.Handler) sdkutil.Handler {
 	return func(handler sdkutil.Handler) sdkutil.Handler {
 		return func(method string, params api.Params) (api.Response, error) {

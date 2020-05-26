@@ -1,12 +1,13 @@
 package botpoll
 
 import (
-	"github.com/SevereCloud/vksdk/object"
-	"github.com/stretchr/testify/assert"
-	"github.com/tdakkota/vksdkutil/testutil"
 	"sync/atomic"
 	"testing"
 	"time"
+
+	"github.com/SevereCloud/vksdk/object"
+	"github.com/stretchr/testify/assert"
+	"github.com/tdakkota/vksdkutil/testutil"
 )
 
 func TestTestLongPoll(t *testing.T) {
@@ -30,7 +31,7 @@ func TestTestLongPoll(t *testing.T) {
 	go func() {
 		err := lp.Run()
 		if err != nil {
-			t.Fatal(err)
+			t.Error(err)
 		}
 	}()
 

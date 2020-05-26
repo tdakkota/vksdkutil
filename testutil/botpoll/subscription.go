@@ -2,11 +2,12 @@ package botpoll
 
 import (
 	"context"
-	"github.com/SevereCloud/vksdk/object"
 	"math/rand"
 	"strconv"
 	"sync"
 	"time"
+
+	"github.com/SevereCloud/vksdk/object"
 )
 
 type subscription struct {
