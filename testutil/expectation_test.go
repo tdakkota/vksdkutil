@@ -15,8 +15,10 @@ func createExpectation() (string, api.Params, *Expectation) {
 		"key":  1,
 		"key2": "value",
 	}
-	e := NewExpectation(method).
-		WithParams(params)
+
+	e := NewExpectation(method).WithParamsF(func() api.Params {
+		return params
+	})
 	return method, params, e
 }
 
@@ -48,6 +50,20 @@ func TestExpectation(t *testing.T) {
 		method, _, e := createExpectation()
 
 		match, _, err := e.Match(method, api.Params{
+			"key":  2,
+			"key2": "value",
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		assert.False(t, match)
+	})
+
+	t.Run("params-not-match", func(t *testing.T) {
+		method, _, e := createExpectation()
+
+		match, _, err := e.Match(method, api.Params{
 			"key": 1,
 		})
 		if err != nil {
@@ -65,7 +81,9 @@ func TestWithResponse(t *testing.T) {
 		returns := api.Response{
 			Response: []byte(`2`),
 		}
-		e.Returns(returns)
+		e.ReturnsF(func() api.Response {
+			return returns
+		})
 
 		_, response, err := e.Match(method, params)
 		if err != nil {

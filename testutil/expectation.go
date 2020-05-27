@@ -26,9 +26,17 @@ func (e *Expectation) WithParams(params api.Params) *Expectation {
 	return e
 }
 
+func (e *Expectation) WithParamsF(f func() api.Params) *Expectation {
+	return e.WithParams(f())
+}
+
 func (e *Expectation) Returns(response api.Response) *Expectation {
 	e.Response = response
 	return e
+}
+
+func (e *Expectation) ReturnsF(f func() api.Response) *Expectation {
+	return e.Returns(f())
 }
 
 func (e *Expectation) ReturnsJSON(v interface{}) *Expectation {
