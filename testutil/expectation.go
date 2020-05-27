@@ -44,9 +44,17 @@ func (e *Expectation) ReturnsJSON(v interface{}) *Expectation {
 	return e
 }
 
+func (e *Expectation) ReturnsJSONF(f func() interface{}) *Expectation {
+	return e.ReturnsJSON(f())
+}
+
 func (e *Expectation) ReturnsBytes(data []byte) *Expectation {
 	e.Response.Response = data
 	return e
+}
+
+func (e *Expectation) ReturnsBytesF(f func() []byte) *Expectation {
+	return e.ReturnsBytes(f())
 }
 
 func (e *Expectation) WithError(message string) *Expectation {
