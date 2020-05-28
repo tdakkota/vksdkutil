@@ -1,11 +1,12 @@
 package botpoll
 
 import (
-	"github.com/SevereCloud/vksdk/object"
 	"net/http"
 	"net/url"
 	"testing"
 	"time"
+
+	"github.com/SevereCloud/vksdk/object"
 
 	"github.com/stretchr/testify/assert"
 )

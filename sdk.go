@@ -14,10 +14,7 @@ type SDKBuilder struct {
 
 // WithMiddleware adds Handler middleware.
 func (builder SDKBuilder) WithMiddleware(f Middleware) SDKBuilder {
-	tmp := builder.sdk.Handler
-	builder.sdk.Handler = func(method string, params api.Params) (api.Response, error) {
-		return f(tmp)(method, params)
-	}
+	PatchHandler(builder.sdk, f)
 
 	return builder
 }
