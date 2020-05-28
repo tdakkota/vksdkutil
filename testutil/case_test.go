@@ -22,13 +22,17 @@ func TestTestCase(t *testing.T) {
 
 		_, err = vksdk.Request("expect.method2", params)
 		assert.Error(t, err)
+
+		assert.NoError(t, testCase.ExpectationsWereMet())
 	})
 
 	t.Run("not-expected", func(t *testing.T) {
-		vksdk, _ := CreateSDK(t)
+		vksdk, testCase := CreateSDK(t)
 
 		_, err := vksdk.Request("notexpect.method", api.Params{})
 		assert.Equal(t, ErrNotExpected, err)
+
+		assert.NoError(t, testCase.ExpectationsWereMet())
 	})
 
 	t.Run("not-matched", func(t *testing.T) {
@@ -40,6 +44,19 @@ func TestTestCase(t *testing.T) {
 		testCase.ExpectCall("expect.method").WithParams(params)
 
 		_, err := vksdk.Request("expect.method", api.Params{})
-		assert.Equal(t, ErrNotMatched, err)
+		assert.Error(t, err)
+
+		assert.NoError(t, testCase.ExpectationsWereMet())
+	})
+
+	t.Run("not-all-called", func(t *testing.T) {
+		_, testCase := CreateSDK(t)
+
+		params := api.Params{
+			"param": 1,
+		}
+		testCase.ExpectCall("expect.method").WithParams(params)
+
+		assert.Error(t, testCase.ExpectationsWereMet())
 	})
 }

@@ -10,10 +10,11 @@ import (
 
 type TestCase struct {
 	Expectations Expectations
+	T            *testing.T
 }
 
-func NewTestCase() *TestCase {
-	return &TestCase{Expectations: Expectations{}}
+func NewTestCase(t *testing.T) *TestCase {
+	return &TestCase{Expectations: Expectations{}, T: t}
 }
 
 func (test *TestCase) ExpectCall(method string) *Expectation {
@@ -23,8 +24,15 @@ func (test *TestCase) ExpectCall(method string) *Expectation {
 	return p
 }
 
+func (test *TestCase) ExpectationsWereMet() error {
+	if len(test.Expectations) != 0 {
+		return fmt.Errorf("expected %d calls yet", len(test.Expectations))
+	}
+
+	return nil
+}
+
 var ErrNotExpected = fmt.Errorf("call is not expected")
-var ErrNotMatched = fmt.Errorf("call is not matched")
 
 func (test *TestCase) Handler() sdkutil.Handler {
 	return func(method string, params api.Params) (api.Response, error) {
@@ -34,16 +42,27 @@ func (test *TestCase) Handler() sdkutil.Handler {
 		}
 
 		matches, response, err := r.Match(method, params)
-		if !matches {
-			return api.Response{}, ErrNotMatched
+		if matches && err != nil {
+			return api.Response{}, err
 		}
 
 		return response, err
 	}
 }
 
+func WithSDK(t *testing.T, f func(*testing.T, *api.VK, *TestCase)) {
+	sdk, testCase := CreateSDK(t)
+	defer func() {
+		if err := testCase.ExpectationsWereMet(); err != nil {
+			t.Error(err)
+		}
+	}()
+
+	f(t, sdk, testCase)
+}
+
 func CreateSDK(t *testing.T) (*api.VK, *TestCase) {
-	sdk, testCase := api.NewVK(""), NewTestCase()
+	sdk, testCase := api.NewVK(""), NewTestCase(t)
 	sdk.Handler = testCase.Handler()
 
 	return sdk, testCase

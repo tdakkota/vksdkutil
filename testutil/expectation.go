@@ -95,28 +95,33 @@ func (e Expectation) generateError(params api.Params) object.Error {
 	}
 }
 
-func matchParams(got, expected api.Params) bool {
+func matchParams(got, expected api.Params) error {
 	for name, param := range expected {
 		v, ok := got[name]
-		if !ok || api.FmtValue(param, 0) != api.FmtValue(v, 0) {
-			return false
+		if !ok {
+			return fmt.Errorf("expected param %s", name)
+		}
+
+		gotParam, expectedParam := api.FmtValue(v, 0), api.FmtValue(param, 0)
+		if expectedParam != gotParam {
+			return fmt.Errorf("expected param %s=%s, got %s=%s", name, expectedParam, name, gotParam)
 		}
 	}
 
-	return true
+	return nil
 }
 
-func (e Expectation) matchParams(params api.Params) bool {
+func (e Expectation) matchParams(params api.Params) error {
 	return matchParams(params, e.Params)
 }
 
 func (e Expectation) Match(method string, params api.Params) (bool, api.Response, error) {
 	if e.Method != method {
-		return false, api.Response{}, nil
+		return false, api.Response{}, fmt.Errorf("expected method %s, got %s", e.Method, method)
 	}
 
-	if !e.matchParams(params) {
-		return false, api.Response{}, nil
+	if err := e.matchParams(params); err != nil {
+		return false, api.Response{}, err
 	}
 
 	if e.ErrorResponse {

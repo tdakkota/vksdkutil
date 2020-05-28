@@ -39,10 +39,7 @@ func TestExpectation(t *testing.T) {
 		_, params, e := createExpectation()
 
 		match, _, err := e.Match("not.expected", params)
-		if err != nil {
-			t.Fatal(err)
-		}
-
+		assert.Error(t, err)
 		assert.False(t, match)
 	})
 
@@ -53,10 +50,7 @@ func TestExpectation(t *testing.T) {
 			"key":  2,
 			"key2": "value",
 		})
-		if err != nil {
-			t.Fatal(err)
-		}
-
+		assert.Error(t, err)
 		assert.False(t, match)
 	})
 
@@ -66,10 +60,7 @@ func TestExpectation(t *testing.T) {
 		match, _, err := e.Match(method, api.Params{
 			"key": 1,
 		})
-		if err != nil {
-			t.Fatal(err)
-		}
-
+		assert.Error(t, err)
 		assert.False(t, match)
 	})
 }
@@ -99,7 +90,9 @@ func TestWithResponse(t *testing.T) {
 		returns := object.MessagesMessage{
 			PeerID: 10,
 		}
-		e.ReturnsJSON(returns)
+		e.ReturnsJSONF(func() interface{} {
+			return returns
+		})
 
 		_, response, err := e.Match(method, params)
 		if err != nil {
@@ -117,7 +110,9 @@ func TestWithResponse(t *testing.T) {
 		method, params, e := createExpectation()
 
 		returns := []byte(`10`)
-		e.ReturnsBytes(returns)
+		e.ReturnsBytesF(func() []byte {
+			return returns
+		})
 
 		_, response, err := e.Match(method, params)
 		if err != nil {
