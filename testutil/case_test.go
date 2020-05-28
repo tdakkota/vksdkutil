@@ -59,4 +59,10 @@ func TestTestCase(t *testing.T) {
 
 		assert.Error(t, testCase.ExpectationsWereMet())
 	})
+
+	t.Run("with-sdk", func(t *testing.T) {
+		WithSDK(t, func(t *testing.T, vk *api.VK, testCase *TestCase) {})
+
+		assert.False(t, t.Failed())
+	})
 }

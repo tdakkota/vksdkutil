@@ -1,6 +1,7 @@
 package botpoll
 
 import (
+	"github.com/SevereCloud/vksdk/object"
 	"net/http"
 	"net/url"
 	"testing"
@@ -9,12 +10,21 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func testParseArgs(t *testing.T, query url.Values) (time.Duration, string, error) {
+func createRequest(query url.Values) (*http.Request, error) {
 	req, err := http.NewRequest(http.MethodGet, "/testurl", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req.URL.RawQuery = query.Encode()
+	return req, nil
+}
+
+func testParseArgs(t *testing.T, query url.Values) (time.Duration, string, error) {
+	req, err := createRequest(query)
 	if err != nil {
 		t.Fatal(err)
 	}
-	req.URL.RawQuery = query.Encode()
 
 	return TestLongPoll{}.parseArgs(req)
 }
@@ -56,5 +66,47 @@ func TestTestLongPoll_parseArgs(t *testing.T) {
 		}
 
 		assert.Equal(t, wait.Nanoseconds(), (90 * time.Second).Nanoseconds())
+	})
+}
+
+func testHandler(url string, args url.Values) func(t *testing.T) {
+	return func(t *testing.T) {
+		server := NewTestLongPoll()
+		defer server.Close()
+
+		assert.HTTPError(t, server.ServeHTTP, "GET", url, args)
+	}
+}
+
+func TestTestLongPoll_ServeHTTP(t *testing.T) {
+	t.Run("fails-parse-args", testHandler("/test", url.Values{
+		"wait": []string{"what"},
+		"key":  []string{"abc"},
+	}))
+
+	t.Run("fails-get-subscriptions", testHandler("/test", url.Values{
+		"wait": []string{"25"},
+		"key":  []string{"abc"},
+	}))
+}
+
+func TestTestLongPoll_Unsubscribe(t *testing.T) {
+	t.Run("exists", func(t *testing.T) {
+		server := NewTestLongPoll()
+		defer server.Close()
+
+		params := server.Subscribe()
+		assert.Len(t, server.subscriptions.subs, 1)
+
+		server.Unsubscribe(params)
+		assert.Empty(t, server.subscriptions.subs)
+	})
+
+	t.Run("not-exists", func(t *testing.T) {
+		server := NewTestLongPoll()
+		defer server.Close()
+
+		server.Unsubscribe(object.MessagesLongpollParams{})
+		assert.Empty(t, server.subscriptions.subs)
 	})
 }

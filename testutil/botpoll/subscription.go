@@ -12,14 +12,14 @@ import (
 )
 
 type subscription struct {
-	notify *int64
+	notify int64
 
 	events []object.GroupEvent
 	lock   sync.Mutex
 }
 
 func newSubscription() *subscription {
-	return &subscription{notify: new(int64)}
+	return &subscription{notify: 0}
 }
 
 func (s *subscription) Notify(events []object.GroupEvent) {
@@ -27,7 +27,7 @@ func (s *subscription) Notify(events []object.GroupEvent) {
 	defer s.lock.Unlock()
 
 	s.events = append(s.events, events...)
-	atomic.StoreInt64(s.notify, 1)
+	atomic.StoreInt64(&s.notify, 1)
 }
 
 func pollResponse(events []object.GroupEvent) object.LongpollBotResponse {
@@ -53,8 +53,8 @@ func (s *subscription) Poll(ctxt context.Context) object.LongpollBotResponse {
 		case <-ctxt.Done():
 			return pollResponse(nil)
 		default:
-			if atomic.LoadInt64(s.notify) == 1 {
-				atomic.StoreInt64(s.notify, 0)
+			if atomic.LoadInt64(&s.notify) == 1 {
+				atomic.StoreInt64(&s.notify, 0)
 				return s.returnEvents()
 			}
 			runtime.Gosched()
@@ -66,6 +66,6 @@ func (s *subscription) Close() error {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
-	atomic.StoreInt64(s.notify, 1)
+	atomic.StoreInt64(&s.notify, 1)
 	return nil
 }

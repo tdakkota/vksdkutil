@@ -10,12 +10,12 @@ import (
 )
 
 type subscriptions struct {
-	subscriptions map[string]*subscription
-	lock          sync.Mutex
+	subs map[string]*subscription
+	lock sync.Mutex
 }
 
 func newSubscriptions() *subscriptions {
-	return &subscriptions{subscriptions: map[string]*subscription{}}
+	return &subscriptions{subs: map[string]*subscription{}}
 }
 
 func generateKey(check func(string) bool) string {
@@ -32,11 +32,11 @@ func (s *subscriptions) Create() string {
 	defer s.lock.Unlock()
 
 	key := generateKey(func(k string) bool {
-		_, ok := s.subscriptions[k]
+		_, ok := s.subs[k]
 		return ok
 	})
 
-	s.subscriptions[key] = newSubscription()
+	s.subs[key] = newSubscription()
 
 	return key
 }
@@ -45,7 +45,7 @@ func (s *subscriptions) Get(key string) (*subscription, bool) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
-	v, ok := s.subscriptions[key]
+	v, ok := s.subs[key]
 	return v, ok
 }
 
@@ -53,7 +53,7 @@ func (s *subscriptions) Notify(events []object.GroupEvent) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
-	for _, sub := range s.subscriptions {
+	for _, sub := range s.subs {
 		sub.Notify(events)
 	}
 }
@@ -62,14 +62,14 @@ func (s *subscriptions) Delete(key string) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
-	delete(s.subscriptions, key)
+	delete(s.subs, key)
 }
 
 func (s *subscriptions) Close() error {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
-	for _, sub := range s.subscriptions {
+	for _, sub := range s.subs {
 		_ = sub.Close()
 	}
 	return nil

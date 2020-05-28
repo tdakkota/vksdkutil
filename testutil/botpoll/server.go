@@ -101,6 +101,8 @@ func (l TestLongPoll) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		_ = json.NewEncoder(w).Encode(object.Error{
 			Message: fmt.Errorf("invalid test request: %w", err).Error(),
 		})
+
+		return
 	}
 
 	subs, ok := l.subscriptions.Get(key)
@@ -109,6 +111,8 @@ func (l TestLongPoll) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		_ = json.NewEncoder(w).Encode(object.Error{
 			Message: fmt.Errorf("key doesn't exists").Error(),
 		})
+
+		return
 	}
 
 	ctxt, cancel := context.WithTimeout(r.Context(), wait*time.Second)
