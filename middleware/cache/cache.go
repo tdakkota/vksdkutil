@@ -9,13 +9,15 @@ import (
 
 var ErrCacheMiss = errors.New("cache miss")
 
-// Storage interface represents a cache storage instance
+// Storage interface represents a cache storage instance.
 type Storage interface {
 	Save(key Key, value api.Response) error
 	Load(key Key) (api.Response, error)
 }
 
-func Create(c Storage, cacheable func(method string, param api.Params) bool) sdkutil.Middleware {
+type CacheableFunc = func(method string, param api.Params) bool
+
+func Create(c Storage, cacheable CacheableFunc) sdkutil.Middleware {
 	return func(handler sdkutil.Handler) sdkutil.Handler {
 		return func(method string, params api.Params) (api.Response, error) {
 			if !cacheable(method, params) {

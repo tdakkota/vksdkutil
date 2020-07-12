@@ -1,9 +1,11 @@
 package cache
 
 import (
+	"errors"
+	"testing"
+
 	"github.com/SevereCloud/vksdk/api"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 type mockStorage struct {
@@ -49,7 +51,7 @@ func TestMiddleware(t *testing.T) {
 		assert.Equal(t, 1, storage.reads)
 	})
 
-	t.Run("do-not-cache", func(t *testing.T) {
+	t.Run("not-cacheable", func(t *testing.T) {
 		storage := new(mockStorage)
 		m := Create(storage, func(method string, param api.Params) bool {
 			return false
@@ -69,6 +71,26 @@ func TestMiddleware(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
+		assert.Zero(t, storage.reads)
+	})
+
+	var testErr = errors.New("test error")
+	t.Run("request-error", func(t *testing.T) {
+		storage := new(mockStorage)
+		m := Create(storage, func(method string, param api.Params) bool {
+			return true
+		})
+
+		handler := m(func(method string, params api.Params) (api.Response, error) {
+			return api.Response{}, testErr
+		})
+
+		_, err := handler("test", api.Params{"a": "1", "b": "2"})
+		assert.Error(t, err)
+		assert.Zero(t, storage.writes)
+
+		_, err = handler("test", api.Params{"b": "2", "a": "1"})
+		assert.Error(t, err)
 		assert.Zero(t, storage.reads)
 	})
 }

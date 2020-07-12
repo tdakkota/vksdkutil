@@ -6,7 +6,7 @@ import (
 	"github.com/SevereCloud/vksdk/api"
 )
 
-// Key is cache key
+// Key is cache key.
 type Key struct {
 	Method string
 	Params OrderedParams

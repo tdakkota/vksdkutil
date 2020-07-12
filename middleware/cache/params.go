@@ -6,13 +6,13 @@ import (
 	"github.com/SevereCloud/vksdk/api"
 )
 
-// Param is VK API method argument
+// Param is VK API method argument.
 type Param struct {
 	Key   string
 	Value interface{}
 }
 
-// OrderedParams is ordered VK API method arguments
+// OrderedParams is ordered VK API method arguments.
 type OrderedParams []Param
 
 func CreateParams(params api.Params) OrderedParams {
