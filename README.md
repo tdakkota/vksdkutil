@@ -8,10 +8,13 @@ Some useful things for [vksdk](https://github.com/SevereCloud/vksdk)
 
 ## Features
 
-- Handler middlewares(logging, retrying, etc.)
+- Handler middlewares
+    - [Logging](https://github.com/tdakkota/vksdkutil/tree/master/middleware/log)
+    - [Retrying](https://github.com/tdakkota/vksdkutil/blob/master/middleware/README.md)
+    - [Caching](https://github.com/tdakkota/vksdkutil/blob/master/middleware/cache/README.md)
 - `testutil` package for `api.VK` mocking
 
-### Middleware example
+## Middleware example
 
 ```go
 package main
@@ -20,18 +23,18 @@ import (
     "github.com/rs/zerolog"
     "github.com/rs/zerolog/log"
     sdkutil "github.com/tdakkota/vksdkutil"
-    zlog "github.com/tdakkota/vksdkutil/middleware/zerolog"
+    zlog "github.com/tdakkota/vksdkutil/middleware/log/zerolog"
 )
 
 func main() {
     vk := sdkutil.BuildSDK("token").WithMiddleware(zlog.LoggingMiddleware(
          log.With().Str("type", "vksdk").Logger().Level(zerolog.DebugLevel),
-    ))
+    )).Complete()
     // ...
 }
 ```
 
-### Testing example
+## Testing example
 You have a file
 
 ```go
