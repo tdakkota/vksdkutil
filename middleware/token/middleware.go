@@ -5,13 +5,11 @@ import (
 	sdkutil "github.com/tdakkota/vksdkutil"
 )
 
-type Getter func(string, api.Params) (string, error)
-
-func Create(force bool, get Getter) sdkutil.Middleware {
+func Create(force bool, getter Getter) sdkutil.Middleware {
 	return func(handler sdkutil.Handler) sdkutil.Handler {
 		return func(method string, params api.Params) (api.Response, error) {
 			if force || params["access_token"] == "" {
-				token, err := get(method, params)
+				token, err := getter.Get(method, params)
 				if err != nil {
 					return api.Response{}, err
 				}
