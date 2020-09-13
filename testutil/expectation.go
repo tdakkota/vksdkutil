@@ -3,10 +3,10 @@ package testutil
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/tdakkota/vksdkutil/v2/middleware/paramsutil"
 
-	"github.com/SevereCloud/vksdk/api"
-	"github.com/SevereCloud/vksdk/api/errors"
-	"github.com/SevereCloud/vksdk/object"
+	"github.com/SevereCloud/vksdk/v2/api"
+	"github.com/SevereCloud/vksdk/v2/object"
 )
 
 type Expectation struct {
@@ -68,36 +68,38 @@ func (e *Expectation) Fails(fails bool) *Expectation {
 	return e
 }
 
-func paramsToRequestParams(params api.Params) []object.BaseRequestParam {
+func paramsToRequestParams(params ...api.Params) []object.BaseRequestParam {
 	r := make([]object.BaseRequestParam, 0, len(params))
 
-	for name, param := range params {
-		r = append(r, object.BaseRequestParam{
-			Key:   name,
-			Value: api.FmtValue(param, 0),
-		})
+	for _, set := range params {
+		for name, param := range set {
+			r = append(r, object.BaseRequestParam{
+				Key:   name,
+				Value: api.FmtValue(param, 0),
+			})
+		}
 	}
 
 	return r
 }
 
-func (e Expectation) generateError(params api.Params) object.Error {
+func (e Expectation) generateError(params ...api.Params) api.Error {
 	text := e.ErrorMessage
 	if text == "" {
 		text = fmt.Sprintf("Generated test error for %s method", e.Method)
 	}
 
-	return object.Error{
+	return api.Error{
 		Code:          9999,
 		Message:       text,
 		Text:          text,
-		RequestParams: paramsToRequestParams(params),
+		RequestParams: paramsToRequestParams(params...),
 	}
 }
 
-func matchParams(got, expected api.Params) error {
+func matchParams(expected api.Params, got []api.Params) error {
 	for name, param := range expected {
-		v, ok := got[name]
+		v, ok := paramsutil.Find(name, got...)
 		if !ok {
 			return fmt.Errorf("expected param %s", name)
 		}
@@ -111,24 +113,24 @@ func matchParams(got, expected api.Params) error {
 	return nil
 }
 
-func (e Expectation) matchParams(params api.Params) error {
-	return matchParams(params, e.Params)
+func (e Expectation) matchParams(params ...api.Params) error {
+	return matchParams(e.Params, params)
 }
 
-func (e Expectation) Match(method string, params api.Params) (bool, api.Response, error) {
+func (e Expectation) Match(method string, params ...api.Params) (bool, api.Response, error) {
 	if e.Method != method {
 		return false, api.Response{}, fmt.Errorf("expected method %s, got %s", e.Method, method)
 	}
 
-	if err := e.matchParams(params); err != nil {
+	if err := e.matchParams(params...); err != nil {
 		return false, api.Response{}, err
 	}
 
 	if e.ErrorResponse {
-		err := e.generateError(params)
+		err := e.generateError(params...)
 		return true, api.Response{
 			Error: err,
-		}, errors.New(err)
+		}, err
 	}
 
 	if e.Response.Response == nil {

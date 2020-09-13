@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/SevereCloud/vksdk/api"
-	sdkutil "github.com/tdakkota/vksdkutil"
+	"github.com/SevereCloud/vksdk/v2/api"
+	sdkutil "github.com/tdakkota/vksdkutil/v2"
 )
 
 type TestCase struct {
@@ -35,13 +35,13 @@ func (test *TestCase) ExpectationsWereMet() error {
 var ErrNotExpected = fmt.Errorf("call is not expected")
 
 func (test *TestCase) Handler() sdkutil.Handler {
-	return func(method string, params api.Params) (api.Response, error) {
+	return func(method string, params ...api.Params) (api.Response, error) {
 		r, ok := test.Expectations.Pop()
 		if !ok {
 			return api.Response{}, ErrNotExpected
 		}
 
-		matches, response, err := r.Match(method, params)
+		matches, response, err := r.Match(method, params...)
 		if matches && err != nil {
 			return api.Response{}, err
 		}

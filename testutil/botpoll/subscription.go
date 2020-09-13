@@ -2,19 +2,19 @@ package botpoll
 
 import (
 	"context"
+	"github.com/SevereCloud/vksdk/v2/events"
+	"github.com/SevereCloud/vksdk/v2/longpoll-bot"
 	"runtime"
 	"strconv"
 	"sync"
 	"sync/atomic"
 	"time"
-
-	"github.com/SevereCloud/vksdk/object"
 )
 
 type subscription struct {
 	notify int64
 
-	events []object.GroupEvent
+	events []events.GroupEvent
 	lock   sync.Mutex
 }
 
@@ -22,7 +22,7 @@ func newSubscription() *subscription {
 	return &subscription{notify: 0}
 }
 
-func (s *subscription) Notify(events []object.GroupEvent) {
+func (s *subscription) Notify(events []events.GroupEvent) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
@@ -30,15 +30,15 @@ func (s *subscription) Notify(events []object.GroupEvent) {
 	atomic.StoreInt64(&s.notify, 1)
 }
 
-func pollResponse(events []object.GroupEvent) object.LongpollBotResponse {
-	return object.LongpollBotResponse{
+func pollResponse(events []events.GroupEvent) longpoll.Response {
+	return longpoll.Response{
 		Ts:      strconv.FormatInt(time.Now().Unix(), 10),
 		Updates: events,
 		Failed:  0,
 	}
 }
 
-func (s *subscription) returnEvents() (r object.LongpollBotResponse) {
+func (s *subscription) returnEvents() (r longpoll.Response) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
@@ -47,7 +47,7 @@ func (s *subscription) returnEvents() (r object.LongpollBotResponse) {
 	return
 }
 
-func (s *subscription) Poll(ctxt context.Context) object.LongpollBotResponse {
+func (s *subscription) Poll(ctxt context.Context) longpoll.Response {
 	for {
 		select {
 		case <-ctxt.Done():

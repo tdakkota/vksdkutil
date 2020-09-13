@@ -1,12 +1,11 @@
 package botpoll
 
 import (
+	"github.com/SevereCloud/vksdk/v2/events"
 	"math/rand"
 	"strconv"
 	"sync"
 	"time"
-
-	"github.com/SevereCloud/vksdk/object"
 )
 
 type subscriptions struct {
@@ -49,7 +48,7 @@ func (s *subscriptions) Get(key string) (*subscription, bool) {
 	return v, ok
 }
 
-func (s *subscriptions) Notify(events []object.GroupEvent) {
+func (s *subscriptions) Notify(events []events.GroupEvent) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 

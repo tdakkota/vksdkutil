@@ -3,21 +3,24 @@ package botpoll
 import (
 	"strconv"
 
-	"github.com/SevereCloud/vksdk/api"
-	"github.com/SevereCloud/vksdk/longpoll-bot"
+	"github.com/SevereCloud/vksdk/v2/api"
+	"github.com/SevereCloud/vksdk/v2/longpoll-bot"
 )
 
-func NewLongPoll(vk *api.VK) (*longpoll.Longpoll, TestLongPoll) {
+func NewLongPoll(vk *api.VK) (*longpoll.LongPoll, TestLongPoll) {
 	server := NewTestLongPoll()
 
 	options := server.Subscribe()
-	lp := &longpoll.Longpoll{
+	vk.Client = server.Client()
+	vk.MethodURL = server.URL()
+
+	lp := &longpoll.LongPoll{
 		Server: options.Server,
 		Key:    options.Key,
 		Ts:     strconv.Itoa(options.Ts),
 		Wait:   25,
 		VK:     vk,
-		Client: server.Client(),
+		Client: vk.Client,
 	}
 
 	return lp, server

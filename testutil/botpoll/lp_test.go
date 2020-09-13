@@ -1,17 +1,17 @@
 package botpoll
 
 import (
+	"context"
+	"github.com/SevereCloud/vksdk/v2/events"
+	"github.com/SevereCloud/vksdk/v2/object"
+	"github.com/stretchr/testify/assert"
+	"github.com/tdakkota/vksdkutil/v2/testutil"
 	"sync/atomic"
 	"testing"
-	"time"
-
-	"github.com/SevereCloud/vksdk/object"
-	"github.com/stretchr/testify/assert"
-	"github.com/tdakkota/vksdkutil/testutil"
 )
 
 func TestTestLongPoll(t *testing.T) {
-	vk, _ := testutil.CreateSDK(t)
+	vk, e := testutil.CreateSDK(t)
 
 	lp, server := NewLongPoll(vk)
 	defer server.Close()
@@ -19,17 +19,27 @@ func TestTestLongPoll(t *testing.T) {
 	messages := []string{"test message", "second test message"}
 	messageCounter := int64(len(messages))
 
-	lp.MessageNew(func(msg object.MessageNewObject, i int) {
+	wait := make(chan struct{}, 1)
+	lp.MessageNew(func(ctx context.Context, msg events.MessageNewObject) {
 		n := len(messages) - int(atomic.LoadInt64(&messageCounter))
 
 		assert.Equal(t, 1, msg.Message.PeerID)
 		assert.Equal(t, messages[n], msg.Message.Text)
 
 		atomic.AddInt64(&messageCounter, -1)
+
+		counter := atomic.LoadInt64(&messageCounter)
+		if counter == 0 {
+			wait <- struct{}{}
+		}
 	})
 
 	go func() {
-		_ = lp.Run()
+		err := lp.Run()
+		if err != nil {
+			t.Error(err)
+			wait <- struct{}{}
+		}
 	}()
 
 	for _, message := range messages {
@@ -42,7 +52,7 @@ func TestTestLongPoll(t *testing.T) {
 		}
 	}
 
-	time.Sleep(1 * time.Second)
+	<-wait
 	lp.Shutdown()
 
 	assert.Zero(t, atomic.LoadInt64(&messageCounter))

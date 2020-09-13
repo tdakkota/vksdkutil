@@ -2,9 +2,9 @@ package botpoll
 
 import (
 	"context"
+	"github.com/SevereCloud/vksdk/v2/events"
 	"testing"
 
-	"github.com/SevereCloud/vksdk/object"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -12,12 +12,12 @@ func TestSubscription(t *testing.T) {
 	s := newSubscription()
 	defer s.Close()
 
-	s.Notify([]object.GroupEvent{
-		{Type: object.EventMessageNew},
+	s.Notify([]events.GroupEvent{
+		{Type: events.EventMessageNew},
 	})
 
-	s.Notify([]object.GroupEvent{
-		{Type: object.EventMessageNew},
+	s.Notify([]events.GroupEvent{
+		{Type: events.EventMessageNew},
 	})
 
 	ctxt, cancel := context.WithCancel(context.Background())

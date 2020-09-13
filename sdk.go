@@ -3,7 +3,7 @@ package sdkutil
 import (
 	"net/http"
 
-	"github.com/SevereCloud/vksdk/api"
+	"github.com/SevereCloud/vksdk/v2/api"
 )
 
 // SDKBuilder represents *api.VK builder.
@@ -62,18 +62,11 @@ func (builder SDKBuilder) Complete() *api.VK {
 
 // BuildSDK creates new SDKBuilder.
 func BuildSDK(token string, tokens ...string) SDKBuilder {
-	var vk *api.VK
-
-	tokensLen := len(tokens)
-	if tokensLen == 0 {
-		vk = api.NewVK(token)
-	} else {
-		tokens = append([]string{token}, tokens...)
-		vk = api.NewVKWithPool(tokens...)
-	}
+	tokens = append([]string{token}, tokens...)
+	vk := api.NewVK(tokens...)
 
 	return SDKBuilder{
-		tokens: tokensLen + 1,
+		tokens: len(tokens),
 		sdk:    vk,
 	}
 }

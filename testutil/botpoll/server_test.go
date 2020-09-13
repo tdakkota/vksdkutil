@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/SevereCloud/vksdk/object"
+	"github.com/SevereCloud/vksdk/v2/object"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -107,7 +107,7 @@ func TestTestLongPoll_Unsubscribe(t *testing.T) {
 		server := NewTestLongPoll()
 		defer server.Close()
 
-		server.Unsubscribe(object.MessagesLongpollParams{})
+		server.Unsubscribe(object.MessagesLongPollParams{})
 		assert.Empty(t, server.subscriptions.subs)
 	})
 }

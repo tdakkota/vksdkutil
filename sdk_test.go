@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/SevereCloud/vksdk/api"
+	"github.com/SevereCloud/vksdk/v2/api"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -17,7 +17,7 @@ func TestSDKBuilder(t *testing.T) {
 		WithUserAgent("test-user-agent").
 		WithMethodURL("http://test.vk.url/").
 		WithMiddleware(func(handler Handler) Handler {
-			return func(method string, params api.Params) (api.Response, error) {
+			return func(method string, params ...api.Params) (api.Response, error) {
 				return api.Response{
 					Response: []byte("1"),
 				}, nil
@@ -30,12 +30,11 @@ func TestSDKBuilder(t *testing.T) {
 	assert.Equal(t, "test-version", sdk.Version)
 	assert.Equal(t, "test-user-agent", sdk.UserAgent)
 	assert.Equal(t, 10, sdk.Limit)
-	assert.Equal(t, "token", sdk.AccessToken)
 	assert.Equal(t, "http://test.vk.url/", sdk.MethodURL)
 
 	var r int
 
-	err := sdk.RequestUnmarshal("test.call", api.Params{}, &r)
+	err := sdk.RequestUnmarshal("test.call", &r, api.Params{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -48,6 +47,5 @@ func TestPoolCreated(t *testing.T) {
 		WithRequestLimitPerToken(2)
 	sdk := builder.Complete()
 
-	assert.Equal(t, true, sdk.IsPoolClient)
 	assert.Equal(t, 2*2, sdk.Limit)
 }

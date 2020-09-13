@@ -2,9 +2,9 @@ package botpoll
 
 import (
 	"context"
+	"github.com/SevereCloud/vksdk/v2/events"
 	"testing"
 
-	"github.com/SevereCloud/vksdk/object"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -33,12 +33,12 @@ func TestSubscriptions(t *testing.T) {
 		s2, ok := subs.Get(subs.Create())
 		assert.True(t, ok)
 
-		subs.Notify([]object.GroupEvent{
-			{Type: object.EventMessageNew},
+		subs.Notify([]events.GroupEvent{
+			{Type: events.EventMessageNew},
 		})
 
-		subs.Notify([]object.GroupEvent{
-			{Type: object.EventMessageNew},
+		subs.Notify([]events.GroupEvent{
+			{Type: events.EventMessageNew},
 		})
 
 		assert.Len(t, s.Poll(context.Background()).Updates, 2)
