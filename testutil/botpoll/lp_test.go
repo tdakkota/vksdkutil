@@ -34,6 +34,7 @@ func TestTestLongPoll(t *testing.T) {
 		}
 	})
 
+	e.ExpectCall("groups.setLongPollSettings")
 	go func() {
 		err := lp.Run()
 		if err != nil {
