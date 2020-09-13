@@ -3,7 +3,7 @@ package cache
 import (
 	"strings"
 
-	"github.com/SevereCloud/vksdk/api"
+	"github.com/SevereCloud/vksdk/v2/api"
 )
 
 // Key is cache key.
@@ -24,6 +24,6 @@ func (k Key) String() string {
 	return b.String()
 }
 
-func NewKey(method string, params api.Params) Key {
-	return Key{Method: method, Params: CreateParams(params)}
+func NewKey(method string, params ...api.Params) Key {
+	return Key{Method: method, Params: CreateParams(params...)}
 }

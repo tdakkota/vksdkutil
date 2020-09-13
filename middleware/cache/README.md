@@ -11,13 +11,12 @@ type Storage interface {
 ```go
 package main
 import (
-    "strings"
-    "time"
 
-    "github.com/SevereCloud/vksdk/api"
-    sdkutil "github.com/tdakkota/vksdkutil"
-    "github.com/tdakkota/vksdkutil/middleware/cache"
-    "github.com/tdakkota/vksdkutil/middleware/cache/mapcache"
+"github.com/SevereCloud/vksdk/api"
+sdkutil "github.com/tdakkota/vksdkutil"
+"github.com/tdakkota/vksdkutil/middleware/cache"
+"github.com/tdakkota/vksdkutil/middleware/cache/mapcache"
+"strings"
 )
 
 // cache all requests with method which starts with "get"

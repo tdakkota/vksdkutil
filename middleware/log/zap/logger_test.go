@@ -3,7 +3,7 @@ package zap
 import (
 	"testing"
 
-	"github.com/SevereCloud/vksdk/api"
+	"github.com/SevereCloud/vksdk/v2/api"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -19,7 +19,7 @@ func TestLoggingMiddleware(t *testing.T) {
 	}))
 
 	m := LoggingMiddleware(logger, zap.InfoLevel)
-	handler := m(func(method string, params api.Params) (api.Response, error) {
+	handler := m(func(method string, params ...api.Params) (api.Response, error) {
 		return api.Response{}, nil
 	})
 

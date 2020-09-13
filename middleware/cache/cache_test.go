@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/SevereCloud/vksdk/api"
+	"github.com/SevereCloud/vksdk/v2/api"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -30,11 +30,11 @@ func (m *mockStorage) Load(key Key) (api.Response, error) {
 func TestMiddleware(t *testing.T) {
 	t.Run("all-cache", func(t *testing.T) {
 		storage := new(mockStorage)
-		m := Create(storage, func(method string, param api.Params) bool {
+		m := Create(storage, func(string, ...api.Params) bool {
 			return true
 		})
 
-		handler := m(func(method string, params api.Params) (api.Response, error) {
+		handler := m(func(string, ...api.Params) (api.Response, error) {
 			return api.Response{}, nil
 		})
 
@@ -53,11 +53,11 @@ func TestMiddleware(t *testing.T) {
 
 	t.Run("not-cacheable", func(t *testing.T) {
 		storage := new(mockStorage)
-		m := Create(storage, func(method string, param api.Params) bool {
+		m := Create(storage, func(string, ...api.Params) bool {
 			return false
 		})
 
-		handler := m(func(method string, params api.Params) (api.Response, error) {
+		handler := m(func(method string, params ...api.Params) (api.Response, error) {
 			return api.Response{}, nil
 		})
 
@@ -77,11 +77,11 @@ func TestMiddleware(t *testing.T) {
 	var testErr = errors.New("test error")
 	t.Run("request-error", func(t *testing.T) {
 		storage := new(mockStorage)
-		m := Create(storage, func(method string, param api.Params) bool {
+		m := Create(storage, func(string, ...api.Params) bool {
 			return true
 		})
 
-		handler := m(func(method string, params api.Params) (api.Response, error) {
+		handler := m(func(method string, params ...api.Params) (api.Response, error) {
 			return api.Response{}, testErr
 		})
 

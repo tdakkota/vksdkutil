@@ -4,9 +4,9 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/SevereCloud/vksdk/api"
+	"github.com/SevereCloud/vksdk/v2/api"
 	"github.com/stretchr/testify/require"
-	"github.com/tdakkota/vksdkutil/middleware/cache"
+	"github.com/tdakkota/vksdkutil/v2/middleware/cache"
 )
 
 func TestCache(m cache.Storage) func(t *testing.T) {

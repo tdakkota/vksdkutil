@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/SevereCloud/vksdk/api"
+	"github.com/SevereCloud/vksdk/v2/api"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -14,7 +14,7 @@ func TestRetry(t *testing.T) {
 	m := Retry(int(attempts), timeout)
 
 	counter := attempts
-	handler := m(func(method string, params api.Params) (api.Response, error) {
+	handler := m(func(method string, params ...api.Params) (api.Response, error) {
 		counter--
 		return api.Response{}, fmt.Errorf("test error %d", counter)
 	})

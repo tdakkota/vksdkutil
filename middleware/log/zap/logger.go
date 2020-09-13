@@ -3,8 +3,8 @@ package zap
 import (
 	"time"
 
-	"github.com/SevereCloud/vksdk/api"
-	sdkutil "github.com/tdakkota/vksdkutil"
+	"github.com/SevereCloud/vksdk/v2/api"
+	sdkutil "github.com/tdakkota/vksdkutil/v2"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -12,9 +12,9 @@ import (
 // LoggingMiddleware is middleware which logs VK API request info.
 func LoggingMiddleware(l *zap.Logger, lvl zapcore.Level) func(handler sdkutil.Handler) sdkutil.Handler {
 	return func(handler sdkutil.Handler) sdkutil.Handler {
-		return func(method string, params api.Params) (api.Response, error) {
+		return func(method string, params ...api.Params) (api.Response, error) {
 			start := time.Now()
-			r, err := handler(method, params)
+			r, err := handler(method, params...)
 
 			if e := l.Check(lvl, "send VK request"); e != nil {
 				e.Write(

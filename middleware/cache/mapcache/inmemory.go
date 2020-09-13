@@ -3,8 +3,8 @@ package mapcache
 import (
 	"sync"
 
-	"github.com/SevereCloud/vksdk/api"
-	"github.com/tdakkota/vksdkutil/middleware/cache"
+	"github.com/SevereCloud/vksdk/v2/api"
+	"github.com/tdakkota/vksdkutil/v2/middleware/cache"
 )
 
 type Map struct {

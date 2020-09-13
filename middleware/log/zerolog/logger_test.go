@@ -3,7 +3,7 @@ package zerolog
 import (
 	"testing"
 
-	"github.com/SevereCloud/vksdk/api"
+	"github.com/SevereCloud/vksdk/v2/api"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
@@ -19,7 +19,7 @@ func TestLoggingMiddleware(t *testing.T) {
 	}))
 
 	m := LoggingMiddleware(logger)
-	handler := m(func(method string, params api.Params) (api.Response, error) {
+	handler := m(func(method string, params ...api.Params) (api.Response, error) {
 		return api.Response{}, nil
 	})
 

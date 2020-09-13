@@ -1,8 +1,9 @@
 package middleware
 
 import (
-	"github.com/SevereCloud/vksdk/api"
-	"github.com/tdakkota/vksdkutil"
+	"github.com/SevereCloud/vksdk/v2/api"
+	"github.com/tdakkota/vksdkutil/v2"
+	"github.com/tdakkota/vksdkutil/v2/middleware/paramsutil"
 )
 
 // DeleteParams is middleware which deletes query params from list.
@@ -15,16 +16,16 @@ func DeleteParams(list []string) func(handler sdkutil.Handler) sdkutil.Handler {
 	}
 
 	return func(handler sdkutil.Handler) sdkutil.Handler {
-		return func(method string, params api.Params) (api.Response, error) {
+		return func(method string, params ...api.Params) (api.Response, error) {
 			if len(list) == 1 {
-				delete(params, list[0])
+				paramsutil.Delete(list[0], params...)
 			} else {
 				for i := range list {
-					delete(params, list[i])
+					paramsutil.Delete(list[i], params...)
 				}
 			}
 
-			return handler(method, params)
+			return handler(method, params...)
 		}
 	}
 }
