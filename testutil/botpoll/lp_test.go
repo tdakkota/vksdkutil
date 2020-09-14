@@ -2,6 +2,7 @@ package botpoll
 
 import (
 	"context"
+	"github.com/SevereCloud/vksdk/v2/api"
 	"github.com/SevereCloud/vksdk/v2/events"
 	"github.com/SevereCloud/vksdk/v2/object"
 	"github.com/stretchr/testify/assert"
@@ -12,6 +13,10 @@ import (
 
 func TestTestLongPoll(t *testing.T) {
 	vk, e := testutil.CreateSDK(t)
+	e.AllowNotExpected()
+	e.DefaultResponse = api.Response{
+		Response: []byte(`1`),
+	}
 
 	lp, server := NewLongPoll(vk)
 	defer server.Close()
@@ -34,14 +39,7 @@ func TestTestLongPoll(t *testing.T) {
 		}
 	})
 
-	e.ExpectCall("groups.setLongPollSettings")
-	go func() {
-		err := lp.Run()
-		if err != nil {
-			t.Error(err)
-			wait <- struct{}{}
-		}
-	}()
+	go lp.Run()
 
 	for _, message := range messages {
 		err := server.SendMessage(object.MessagesMessage{
@@ -52,7 +50,6 @@ func TestTestLongPoll(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-
 	<-wait
 	lp.Shutdown()
 
