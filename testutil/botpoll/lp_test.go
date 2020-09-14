@@ -39,7 +39,9 @@ func TestTestLongPoll(t *testing.T) {
 		}
 	})
 
-	go lp.Run()
+	go func() {
+		_ = lp.Run()
+	}()
 
 	for _, message := range messages {
 		err := server.SendMessage(object.MessagesMessage{
