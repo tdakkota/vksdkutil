@@ -64,27 +64,31 @@ func (l TestLongPoll) parseArgs(r *http.Request) (time.Duration, string, error) 
 	return time.Duration(wait) * time.Second, key, nil
 }
 
-func (l TestLongPoll) SendMessage(msg object.MessagesMessage) error {
-	message, err := json.Marshal(events.MessageNewObject{
-		Message: msg,
-	})
-	if err != nil {
-		return err
+func (l TestLongPoll) SendMessage(msgs ...object.MessagesMessage) error {
+	sendEvents := make([]events.GroupEvent, 0, len(msgs))
+	for _, msg := range msgs {
+		message, err := json.Marshal(events.MessageNewObject{
+			Message: msg,
+		})
+		if err != nil {
+			return err
+		}
+
+		sendEvents = append(sendEvents, events.GroupEvent{
+			Type:   events.EventMessageNew,
+			Object: message,
+		})
 	}
 
-	l.NotifyOne(events.GroupEvent{
-		Type:   events.EventMessageNew,
-		Object: message,
-	})
-
+	l.Notify(sendEvents...)
 	return nil
 }
 
 func (l TestLongPoll) NotifyOne(event events.GroupEvent) {
-	l.Notify([]events.GroupEvent{event})
+	l.Notify(event)
 }
 
-func (l TestLongPoll) Notify(events []events.GroupEvent) {
+func (l TestLongPoll) Notify(events ...events.GroupEvent) {
 	l.subscriptions.Notify(events)
 }
 

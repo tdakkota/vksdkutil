@@ -9,12 +9,18 @@ import (
 )
 
 type TestCase struct {
-	Expectations Expectations
-	T            *testing.T
+	Expectations     Expectations
+	T                *testing.T
+	DefaultResponse  api.Response
+	allowNotExpected bool
 }
 
 func NewTestCase(t *testing.T) *TestCase {
 	return &TestCase{Expectations: Expectations{}, T: t}
+}
+
+func (test *TestCase) AllowNotExpected() {
+	test.allowNotExpected = true
 }
 
 func (test *TestCase) ExpectCall(method string) *Expectation {
@@ -38,6 +44,9 @@ func (test *TestCase) Handler() sdkutil.Handler {
 	return func(method string, params ...api.Params) (api.Response, error) {
 		r, ok := test.Expectations.Pop()
 		if !ok {
+			if test.allowNotExpected {
+				return test.DefaultResponse, nil
+			}
 			return api.Response{}, ErrNotExpected
 		}
 
@@ -51,6 +60,8 @@ func (test *TestCase) Handler() sdkutil.Handler {
 }
 
 func WithSDK(t *testing.T, f func(*testing.T, *api.VK, *TestCase)) {
+	t.Helper()
+
 	sdk, testCase := CreateSDK(t)
 	defer func() {
 		if err := testCase.ExpectationsWereMet(); err != nil {
@@ -62,6 +73,8 @@ func WithSDK(t *testing.T, f func(*testing.T, *api.VK, *TestCase)) {
 }
 
 func CreateSDK(t *testing.T) (*api.VK, *TestCase) {
+	t.Helper()
+
 	sdk, testCase := api.NewVK(""), NewTestCase(t)
 	sdk.Handler = testCase.Handler()
 
