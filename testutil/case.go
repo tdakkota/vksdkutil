@@ -32,7 +32,9 @@ func (test *TestCase) ExpectCall(method string) *Expectation {
 
 func (test *TestCase) ExpectationsWereMet() error {
 	if len(test.Expectations) != 0 {
-		return fmt.Errorf("expected %d calls yet", len(test.Expectations))
+		err := fmt.Errorf("expected %d calls yet", len(test.Expectations))
+		test.T.Error(err)
+		return err
 	}
 
 	return nil
