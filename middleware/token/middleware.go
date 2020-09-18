@@ -6,6 +6,8 @@ import (
 	"github.com/tdakkota/vksdkutil/v2/middleware/paramsutil"
 )
 
+// Create creates new Middleware, which adds token to parameters if force parameter is true
+// or if parameter "access_token" not set.
 func Create(force bool, getter Getter) sdkutil.Middleware {
 	return func(handler sdkutil.Handler) sdkutil.Handler {
 		return func(method string, params ...api.Params) (api.Response, error) {

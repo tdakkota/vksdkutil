@@ -9,6 +9,7 @@ import (
 	"github.com/SevereCloud/vksdk/v2/object"
 )
 
+// Expectation is VK API call expectation.
 type Expectation struct {
 	Method        string
 	Params        api.Params
@@ -17,52 +18,66 @@ type Expectation struct {
 	ErrorMessage  string
 }
 
+// NewExpectation creates new Expectation.
 func NewExpectation(method string) *Expectation {
 	return &Expectation{Method: method}
 }
 
+// WithParams sets expected params.
+// If API call contains unexpected params, it wouldn't fail.
 func (e *Expectation) WithParams(params api.Params) *Expectation {
 	e.Params = params
 	return e
 }
 
+// WithParamsF sets expected params using function.
+// If API call contains unexpected params, it wouldn't fail.
 func (e *Expectation) WithParamsF(f func() api.Params) *Expectation {
 	return e.WithParams(f())
 }
 
+// Returns sets API call result.
 func (e *Expectation) Returns(response api.Response) *Expectation {
 	e.Response = response
 	return e
 }
 
+// ReturnsF sets API call result using function.
 func (e *Expectation) ReturnsF(f func() api.Response) *Expectation {
 	return e.Returns(f())
 }
 
+// ReturnsJSON sets API call result.
 func (e *Expectation) ReturnsJSON(v interface{}) *Expectation {
 	e.Response.Response, _ = json.Marshal(v)
 	return e
 }
 
+// ReturnsJSONF sets API call result using function.
 func (e *Expectation) ReturnsJSONF(f func() interface{}) *Expectation {
 	return e.ReturnsJSON(f())
 }
 
+// ReturnsBytes sets API call result.
 func (e *Expectation) ReturnsBytes(data []byte) *Expectation {
 	e.Response.Response = data
 	return e
 }
 
+// ReturnsBytesF sets API call result using function.
 func (e *Expectation) ReturnsBytesF(f func() []byte) *Expectation {
 	return e.ReturnsBytes(f())
 }
 
+// WithError sets API call error.
+// Calls Fails(true).
 func (e *Expectation) WithError(message string) *Expectation {
-	e.ErrorResponse = true
+	e.Fails(true)
 	e.ErrorMessage = message
 	return e
 }
 
+// Fails marks API result as failed.
 func (e *Expectation) Fails(fails bool) *Expectation {
 	e.ErrorResponse = fails
 	return e
@@ -117,6 +132,7 @@ func (e Expectation) matchParams(params ...api.Params) error {
 	return matchParams(e.Params, params)
 }
 
+// Match compares API call.
 func (e Expectation) Match(method string, params ...api.Params) (bool, api.Response, error) {
 	if e.Method != method {
 		return false, api.Response{}, fmt.Errorf("expected method %s, got %s", e.Method, method)
