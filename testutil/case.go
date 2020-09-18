@@ -30,9 +30,20 @@ func (test *TestCase) ExpectCall(method string) *Expectation {
 	return p
 }
 
-func (test *TestCase) ExpectationsWereMet() error {
+// ExpectationsError returns error if not all call expectation were met.
+func (test *TestCase) ExpectationsError() error {
 	if len(test.Expectations) != 0 {
-		err := fmt.Errorf("expected %d calls yet", len(test.Expectations))
+		return fmt.Errorf("expected %d calls yet", len(test.Expectations))
+	}
+
+	return nil
+}
+
+// ExpectationsWereMet checks that all call expectation were met.
+// Calls T.Error(err).
+func (test *TestCase) ExpectationsWereMet() error {
+	err := test.ExpectationsError()
+	if err != nil {
 		test.T.Error(err)
 		return err
 	}
