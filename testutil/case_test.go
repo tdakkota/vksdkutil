@@ -57,7 +57,7 @@ func TestTestCase(t *testing.T) {
 		}
 		testCase.ExpectCall("expect.method").WithParams(params)
 
-		assert.Error(t, testCase.ExpectationsWereMet())
+		assert.Error(t, testCase.ExpectationsError())
 	})
 
 	t.Run("with-sdk", func(t *testing.T) {
