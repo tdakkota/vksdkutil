@@ -19,7 +19,7 @@ func newSubscriptions() *subscriptions {
 
 func generateKey(check func(string) bool) string {
 	for {
-		key := strconv.FormatInt(rand.Int63(), 16) + strconv.FormatInt(time.Now().UnixNano(), 16)
+		key := strconv.FormatInt(rand.Int63(), 16) + strconv.FormatInt(time.Now().UnixNano(), 16) //nolint:gosec
 		if !check(key) {
 			return key
 		}

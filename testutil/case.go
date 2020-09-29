@@ -84,7 +84,7 @@ func WithSDK(t *testing.T, f func(*testing.T, *api.VK, *TestCase)) {
 	t.Helper()
 
 	sdk, testCase := CreateSDK(t)
-	defer testCase.ExpectationsWereMet()
+	defer testCase.ExpectationsWereMet() //nolint:errcheck
 
 	f(t, sdk, testCase)
 }
