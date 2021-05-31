@@ -3,7 +3,7 @@ module github.com/tdakkota/vksdkutil/v2
 go 1.13
 
 require (
-	github.com/SevereCloud/vksdk/v2 v2.9.1
+	github.com/SevereCloud/vksdk/v2 v2.9.2
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/rs/zerolog v1.22.0
 	github.com/sirupsen/logrus v1.8.1
