@@ -1,24 +1,24 @@
-package zerolog
+package zapvk
 
 import (
 	"testing"
 
 	"github.com/SevereCloud/vksdk/v2/api"
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 func TestLoggingMiddleware(t *testing.T) {
-	logger := log.Logger.
-		Level(zerolog.InfoLevel)
+	level := zapcore.InfoLevel
 
-	logger.Hook(zerolog.HookFunc(func(e *zerolog.Event, level zerolog.Level, message string) {
-		assert.Equal(t, zerolog.InfoLevel, level)
-		assert.Equal(t, "send VK request", message)
+	logger, _ := zap.NewProduction(zap.Hooks(func(entry zapcore.Entry) error {
+		assert.Equal(t, level, entry.Level)
+		assert.Equal(t, "send VK request", entry.Message)
+		return nil
 	}))
 
-	m := LoggingMiddleware(logger)
+	m := LoggingMiddleware(logger, zap.InfoLevel)
 	handler := m(func(method string, params ...api.Params) (api.Response, error) {
 		return api.Response{}, nil
 	})
