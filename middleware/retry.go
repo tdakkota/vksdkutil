@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/SevereCloud/vksdk/v2/api"
-	"github.com/tdakkota/vksdkutil/v2"
+	sdkutil "github.com/tdakkota/vksdkutil/v3"
 )
 
 // Retry is middleware which retries requests if underlying handler

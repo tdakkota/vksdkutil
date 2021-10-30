@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/SevereCloud/vksdk/v2/api"
-	sdkutil "github.com/tdakkota/vksdkutil/v2"
+	sdkutil "github.com/tdakkota/vksdkutil/v3"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )

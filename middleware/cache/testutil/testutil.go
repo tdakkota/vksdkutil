@@ -6,7 +6,7 @@ import (
 
 	"github.com/SevereCloud/vksdk/v2/api"
 	"github.com/stretchr/testify/require"
-	"github.com/tdakkota/vksdkutil/v2/middleware/cache"
+	"github.com/tdakkota/vksdkutil/v3/middleware/cache"
 )
 
 func TestCache(m cache.Storage) func(t *testing.T) {

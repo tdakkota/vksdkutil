@@ -2,8 +2,8 @@ package token
 
 import (
 	"github.com/SevereCloud/vksdk/v2/api"
-	sdkutil "github.com/tdakkota/vksdkutil/v2"
-	"github.com/tdakkota/vksdkutil/v2/middleware/paramsutil"
+	sdkutil "github.com/tdakkota/vksdkutil/v3"
+	"github.com/tdakkota/vksdkutil/v3/middleware/paramsutil"
 )
 
 // Create creates new Middleware, which adds token to parameters if force parameter is true

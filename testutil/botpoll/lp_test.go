@@ -2,13 +2,14 @@ package botpoll
 
 import (
 	"context"
+	"sync/atomic"
+	"testing"
+
 	"github.com/SevereCloud/vksdk/v2/api"
 	"github.com/SevereCloud/vksdk/v2/events"
 	"github.com/SevereCloud/vksdk/v2/object"
 	"github.com/stretchr/testify/assert"
-	"github.com/tdakkota/vksdkutil/v2/testutil"
-	"sync/atomic"
-	"testing"
+	"github.com/tdakkota/vksdkutil/v3/testutil"
 )
 
 func TestTestLongPoll(t *testing.T) {

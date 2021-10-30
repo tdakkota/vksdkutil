@@ -2,8 +2,8 @@ package middleware
 
 import (
 	"github.com/SevereCloud/vksdk/v2/api"
-	"github.com/tdakkota/vksdkutil/v2"
-	"github.com/tdakkota/vksdkutil/v2/middleware/paramsutil"
+	sdkutil "github.com/tdakkota/vksdkutil/v3"
+	"github.com/tdakkota/vksdkutil/v3/middleware/paramsutil"
 )
 
 // DeleteParams is middleware which deletes query params from list.

@@ -1,4 +1,4 @@
-module github.com/tdakkota/vksdkutil/v2
+module github.com/tdakkota/vksdkutil/v3
 
 go 1.13
 

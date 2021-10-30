@@ -27,10 +27,9 @@ import (
 )
 
 func main() {
-    vk := sdkutil.BuildSDK("token").WithMiddleware(zlog.LoggingMiddleware(
-         log.With().Str("type", "vksdk").Logger().Level(zerolog.DebugLevel),
-    )).Complete()
-    // ...
+  vk := sdkutil.BuildSDK("token").WithMiddleware(
+    zapvk.LoggingMiddleware(zap.L(), zapcore.DebugLevel),
+  ).Complete()
 }
 ```
 

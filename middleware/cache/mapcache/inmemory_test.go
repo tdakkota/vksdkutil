@@ -3,7 +3,7 @@ package mapcache
 import (
 	"testing"
 
-	"github.com/tdakkota/vksdkutil/v2/middleware/cache/testutil"
+	"github.com/tdakkota/vksdkutil/v3/middleware/cache/testutil"
 )
 
 func TestMap(t *testing.T) {

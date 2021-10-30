@@ -3,7 +3,8 @@ package testutil
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/tdakkota/vksdkutil/v2/middleware/paramsutil"
+
+	"github.com/tdakkota/vksdkutil/v3/middleware/paramsutil"
 
 	"github.com/SevereCloud/vksdk/v2/api"
 	"github.com/SevereCloud/vksdk/v2/object"

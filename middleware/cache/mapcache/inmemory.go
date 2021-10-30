@@ -4,7 +4,7 @@ import (
 	"sync"
 
 	"github.com/SevereCloud/vksdk/v2/api"
-	"github.com/tdakkota/vksdkutil/v2/middleware/cache"
+	"github.com/tdakkota/vksdkutil/v3/middleware/cache"
 )
 
 type Map struct {

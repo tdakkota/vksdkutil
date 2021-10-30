@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/SevereCloud/vksdk/v2/api"
-	sdkutil "github.com/tdakkota/vksdkutil/v2"
+	sdkutil "github.com/tdakkota/vksdkutil/v3"
 )
 
 var ErrCacheMiss = errors.New("cache miss")

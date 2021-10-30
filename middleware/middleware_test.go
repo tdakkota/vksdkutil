@@ -1,11 +1,12 @@
 package middleware
 
 import (
-	"github.com/tdakkota/vksdkutil/v2/middleware/paramsutil"
 	"testing"
 
+	sdkutil "github.com/tdakkota/vksdkutil/v3"
+	"github.com/tdakkota/vksdkutil/v3/middleware/paramsutil"
+
 	"github.com/SevereCloud/vksdk/v2/api"
-	"github.com/tdakkota/vksdkutil/v2"
 )
 
 func testDeleteToken(params []string, handler sdkutil.Handler) func(t *testing.T) {
