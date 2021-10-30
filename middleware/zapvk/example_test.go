@@ -10,9 +10,9 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-func ExampleLoggingMiddleware() {
+func ExampleLog() {
 	vk := sdkutil.BuildSDK("token").WithMiddleware(
-		zapvk.LoggingMiddleware(zap.L(), zapcore.DebugLevel),
+		zapvk.Log(zap.L(), zapcore.DebugLevel, true),
 	).Complete()
 
 	users, err := vk.UsersGet(api.Params{})

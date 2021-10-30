@@ -2,9 +2,10 @@ package token
 
 import (
 	"errors"
+	"testing"
+
 	"github.com/SevereCloud/vksdk/v2/api"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func getter(token string, err error) Getter {

@@ -2,8 +2,9 @@ package botpoll
 
 import (
 	"context"
-	"github.com/SevereCloud/vksdk/v2/events"
 	"testing"
+
+	"github.com/SevereCloud/vksdk/v2/events"
 
 	"github.com/stretchr/testify/assert"
 )

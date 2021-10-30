@@ -20,16 +20,18 @@ Some useful things for [vksdk](https://github.com/SevereCloud/vksdk)
 package main
 
 import (
-    "github.com/rs/zerolog"
-    "github.com/rs/zerolog/log"
-    sdkutil "github.com/tdakkota/vksdkutil"
-    zlog "github.com/tdakkota/vksdkutil/middleware/log/zerolog"
+  "github.com/SevereCloud/vksdk/v2/api"
+  sdkutil "github.com/tdakkota/vksdkutil/v3"
+  "github.com/tdakkota/vksdkutil/v3/middleware/zapvk"
+  "go.uber.org/zap"
+  "go.uber.org/zap/zapcore"
 )
 
 func main() {
   vk := sdkutil.BuildSDK("token").WithMiddleware(
-    zapvk.LoggingMiddleware(zap.L(), zapcore.DebugLevel),
+    zapvk.Log(zap.L(), zapcore.DebugLevel, true),
   ).Complete()
+  // ...
 }
 ```
 

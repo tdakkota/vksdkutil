@@ -4,12 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/SevereCloud/vksdk/v2/api"
-	"github.com/SevereCloud/vksdk/v2/events"
 	"net/http"
 	"net/http/httptest"
 	"strconv"
 	"time"
+
+	"github.com/SevereCloud/vksdk/v2/api"
+	"github.com/SevereCloud/vksdk/v2/events"
 
 	"github.com/SevereCloud/vksdk/v2/object"
 )

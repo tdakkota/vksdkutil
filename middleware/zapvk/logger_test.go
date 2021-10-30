@@ -18,7 +18,7 @@ func TestLoggingMiddleware(t *testing.T) {
 		return nil
 	}))
 
-	m := LoggingMiddleware(logger, zap.InfoLevel)
+	m := Log(logger, zap.InfoLevel)
 	handler := m(func(method string, params ...api.Params) (api.Response, error) {
 		return api.Response{}, nil
 	})

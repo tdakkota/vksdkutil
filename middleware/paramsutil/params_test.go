@@ -1,9 +1,10 @@
 package paramsutil
 
 import (
+	"testing"
+
 	"github.com/SevereCloud/vksdk/v2/api"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func runTest(cb func(a *require.Assertions)) func(*testing.T) {
