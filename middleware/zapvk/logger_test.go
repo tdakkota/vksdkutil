@@ -4,21 +4,18 @@ import (
 	"testing"
 
 	"github.com/SevereCloud/vksdk/v2/api"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"go.uber.org/zap/zaptest/observer"
 )
 
 func TestLoggingMiddleware(t *testing.T) {
+	a := require.New(t)
 	level := zapcore.InfoLevel
+	core, logs := observer.New(level)
 
-	logger, _ := zap.NewProduction(zap.Hooks(func(entry zapcore.Entry) error {
-		assert.Equal(t, level, entry.Level)
-		assert.Equal(t, "send VK request", entry.Message)
-		return nil
-	}))
-
-	m := Log(logger, zap.InfoLevel, true)
+	m := Log(zap.New(core), level, true)
 	handler := m(func(method string, params ...api.Params) (api.Response, error) {
 		return api.Response{}, nil
 	})
@@ -27,4 +24,8 @@ func TestLoggingMiddleware(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	a.Equal(1, logs.Len())
+	log := logs.All()[0]
+	a.Equal("VK request", log.Message)
 }
